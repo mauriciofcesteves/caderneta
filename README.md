@@ -17,4 +17,4 @@ This project is already finished and we used the technologies described bellow:
 -JODA Time API to make date manipulations;  
 -Apache TOMCAT (maven embbeded);  
   
-http://mauriciofcesteves.blogspot.com.br/
+http://mauriciofcesteves.blogspot.ca/
