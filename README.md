@@ -15,6 +15,6 @@ This project is already finished and we used the technologies described bellow:
 -JUnity for unit tests and HSQL database (db in memory for tests);  
 -PostgreSQL;  
 -JODA Time API to make date manipulations;  
--Apacha TOMCAT (maven embbeded);  
+-Apache TOMCAT (maven embbeded);  
   
 http://mauriciofcesteves.blogspot.com.br/
