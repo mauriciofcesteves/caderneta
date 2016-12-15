@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	>
+<h:head>
+	<title>caderneta Application</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<h:outputStylesheet name="css/screen.css" />
+	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/scripts/jquery.maskedinput.js"></script>
+	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/scripts/funcoes.js"></script>
+	<script type="text/javascript">
+		jQuery(function($){
+			 
+			upperText(".up");
+			
+			jQuery(".campoTelefone").focus(
+				function () {
+					$(this).mask("(99) 9999-9999?9"); 
+				}
+			);
+			
+			jQuery(".ui-dialog").click(
+				function () {
+					$(".ui-overlay-visible").css({"backgroundColor": "black", "color": "white"}); 
+					$(".background").css({"backgroundColor": "white"}); 
+				}
+			);
+			
+			jQuery(".campoTelefone").focusout(
+				function () {
+					var phone, element;
+					element = $(this);
+					element.unmask();
+					phone = element.val().replace(/\D/g, '');
+					if (phone.length > 10) {
+						element.mask("(99) 99999-999?9"); 
+					} else { 
+						element.mask("(99) 9999-9999?9"); 
+					} 
+				}
+			);
+			
+			$(".numeral").bind("keyup blur focus", function(e) {
+	            e.preventDefault();
+	            var expre = /[^\d]/g;
+	            $(this).val($(this).val().replace(expre,''));
+	       });
+			
+			$(".codigo").bind("keyup blur focus", function(e) {
+	            e.preventDefault();
+	            var expre = /[\s]/g;
+	            $(this).val($(this).val().replace(expre,''));
+	       });
+			
+			upperText(".codigo");
+			
+			// Funcao que faz o texto ficar em uppercase  
+		    function upperText(clazz) {  
+		        // Para tratar o colar  
+		        jQuery(clazz).bind('paste', function(e) {  
+		            var el = jQuery(this);  
+		            setTimeout(function() {  
+		                var text = jQuery(el).val();  
+		                el.val(text.toUpperCase());  
+		            }, 100);  
+		        });  
+		  
+		        // Para tratar quando é digitado  
+		        jQuery(clazz).keypress(function() {  
+		            var el = jQuery(this);  
+		            setTimeout(function() {  
+		                var text = jQuery(el).val();  
+		                el.val(text.toUpperCase());  
+		            }, 100);  
+		        });  
+		    }
+			
+		});
+	</script>
+</h:head>
+<h:body id="body" styleClass="background">
+
+<h:panelGrid columns="1" cellpadding="5" >
+	<h:inputText styleClass="campoTelefone" />
+    <p:commandButton id="basic" value="Basic" onclick="dlg1.show(); " type="button" />
+
+    <p:commandButton id="modalDialogButton" value="Modal" onclick="dlg2.show();" />
+
+    <p:commandButton id="effectsDialogButton" value="Effects" onclick="dlg3.show();" />
+</h:panelGrid>
+
+<p:dialog id="basicDialog" header="Basic Dialog" widgetVar="dlg1">
+    <h:outputText value="Resistance to PrimeFaces is futile!" />
+</p:dialog>
+
+<p:dialog id="modalDialog" header="Modal Dialog" widgetVar="dlg2" modal="true" height="100">
+    <h:outputText value="This is a Modal Dialog." />
+</p:dialog>
+
+<p:dialog header="Effects" widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
+    <h:outputText value="This dialog has nice effects." />
+</p:dialog>
+				
+	<h:panelGroup id="page" layout="block">
+		<h:panelGroup id="header" layout="block" >
+			<div style="width: 95%; text-align: right;">
+				<br/>
+				<h:form>
+					<h:commandLink value="#{usuarioMB.nomeUsuario}" action="#{usuarioMB.inicializar}"/>
+					<h:outputText value="#{messages.divisor}" />
+					<h:commandLink value="#{messages.home}" action="#{usuarioMB.entrarHome}"/>
+					<h:outputText value="#{messages.divisor}" />
+					<a href="caderneta/j_spring_security_logout">#{messages.sair}</a>
+				</h:form>
+			</div>		
+			<div style="align:center;">
+				<h1><h:outputText value="#{messages.tituloCaderneta}" rendered="#{usuarioMB.aplicacaoCaderneta}"/>
+				<h:outputText value="#{messages.tituloJobs}" rendered="#{usuarioMB.aplicacaoJobs}"/>
+				<h:outputText value="#{messages.tituloHome}" rendered="#{usuarioMB.home}"/></h1>
+			</div>
+		</h:panelGroup>
+		
+		<h:form>
+			<h:panelGroup rendered="#{usuarioMB.aplicacaoCaderneta}" >
+				<p:menubar>
+					<p:submenu label="#{messages.menu_cadastros}" rendered="#{!usuarioMB.usuario.COORDENADOR}">
+						<p:menuitem value="#{messages.menu_professores}" action="#{professoresMB.inicializar}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_coordenadores}" action="#{coordenadoresMB.inicializar}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_disciplinas}" action="#{disciplinasMB.inicializar}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_cursos}" action="#{cursosMB.inicializar}" ajax="false"/>
+					</p:submenu>
+					
+					<p:submenu label="#{messages.menu_cadernetas}" rendered="#{!usuarioMB.usuario.COORDENADOR}">
+						<p:menuitem value="#{messages.menu_cadastro_consulta}" action="#{cadernetasMB.inicializar}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_registrar_devolucao_professor}" action="#{cadernetasMB.inicializarDevolucaoProfessor}" ajax="false" />
+						<p:menuitem value="#{messages.menu_registrar_retirada_coordenador}" action="#{cadernetasMB.inicializarRetiradaCoordenador}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_registrar_devolucao_coordenador}" action="#{cadernetasMB.inicializarDevolucaoCoordenador}" ajax="false"/>
+					</p:submenu>
+					
+					<p:submenu label="#{messages.menu_relatorios}">
+						<p:menuitem value="#{messages.menu_relatorio_professor_resumido}" action="#{relatoriosMB.inicializarRelatorioProfessor}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_relatorio_coordenador_resumido}" action="#{relatoriosMB.inicializarRelatorioCoordenador}" ajax="false"/>
+					</p:submenu>
+	
+					<p:submenu label="#{messages.menu_configuracoes}" rendered="#{usuarioMB.usuario.ADMIN}">
+						<p:menuitem value="#{messages.menu_parametros_sistema_email}" action="#{parametroSistemaMB.inicializarEmail}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_parametros_sistema_template_email}" action="#{parametroSistemaMB.inicializarTemplatesEmail}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_parametros_sistema}" action="#{parametroSistemaMB.inicializar}" ajax="false"/>
+						<p:menuitem value="#{messages.menu_usuarios}" action="#{manterUsuariosMB.inicializar}" ajax="false" rendered="#{usuarioMB.usuario.ADMIN}"/>
+					</p:submenu>
+					
+				</p:menubar>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{usuarioMB.aplicacaoJobs}">
+				<p:menubar>
+					<p:submenu label="#{messages.menu_job}" rendered="#{!usuarioMB.usuario.COORDENADOR}">
+						<p:menuitem value="#{messages.menu_manter_job}" action="#{jobMB.inicializar}" ajax="false" />
+						<p:menuitem value="#{messages.menu_consultar_job}" action="#{jobsAgrupadosMB.inicializar}" ajax="false" />
+					</p:submenu>
+
+					<p:submenu label="#{messages.menu_job}" rendered="#{usuarioMB.usuario.COORDENADOR}">
+						<p:menuitem value="#{messages.menu_concluir_job}" action="#{concluirJobMB.inicializar}" ajax="false" />
+					</p:submenu>
+					
+					<p:submenu label="#{messages.menu_relatorios}">
+						<p:menuitem value="#{messages.dashboard}" action="#{relatorioJobsMB.inicializar}" ajax="false"/>
+					</p:submenu>
+				</p:menubar>
+			</h:panelGroup>
+		</h:form>
+
+		<h:panelGroup id="container" layout="block" >
+			<h:panelGroup layout="block">
+				<ui:insert name="content">Main Content</ui:insert>
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<!-- FOOTER -->
+		<h:panelGroup id="footer" layout="block">
+			#{messages.footerText}
+			<br />
+		</h:panelGroup>
+	</h:panelGroup>
+
+</h:body>
+</html>

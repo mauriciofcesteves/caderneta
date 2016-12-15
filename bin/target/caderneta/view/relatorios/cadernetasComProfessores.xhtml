@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template.xhtml">
+	<ui:define name="content">
+		<h1><h:outputText value="#{messages.menu_relatorio_professor}" /></h1>
+
+		<h:form id="relatorioProfessoresForm">
+			<!-- CONSULTAR -->
+			<p:panel>
+				<table>
+					<tr>
+						<td>
+							<h:outputText value="#{messages.data_prevista_devolucao_professor}" />
+						</td>
+						<td>
+							<p:inputMask value="#{relatoriosMB.dataPrevista}" mask="99/99/9999" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:outputText value="#{messages.data_devolucao_professor}" />
+						</td>
+						<td>
+							<p:inputMask value="#{relatoriosMB.dataDevolucao}" mask="99/99/9999" />
+						</td>
+					</tr>
+				</table>
+				<h:panelGroup id="botoes" style="text-align: left;">
+					<p:commandButton value="#{messages.botao_consultar}" ajax="false" action="#{relatoriosMB.consultar}" update="relatorioProfessoresForm:cadernetasProfessoresTable"/>
+					<p:commandButton value="#{messages.botao_limpar}" ajax="false" action="#{relatoriosMB.inicializar}" update="relatorioProfessoresForm:cadernetasProfessoresTable" immediate="true"/>
+				</h:panelGroup>
+			</p:panel>
+			<br/>
+			<br/>
+			<!-- LISTAGEM -->
+			<p:panel>
+				<ui:include src="listaCadernetasComProfessores.xhtml" />
+			</p:panel>
+			
+			<br />
+			<p:panel header="Exportar dados" style="width: 15%">
+				<center>
+					<h:commandLink>
+						<p:graphicImage value="#{resource['images:pdf.png']}" />
+						<p:dataExporter type="pdf" target="cadernetasProfessoresTable" fileName="cadernetaComProfessores"
+							preProcessor="#{relatoriosMB.preProcessarPDF}" encoding="iso-8859-1"/>
+					</h:commandLink>
+				</center>
+			</p:panel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

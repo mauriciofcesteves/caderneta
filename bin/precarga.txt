@@ -1,0 +1,13 @@
+insert into perfil(nome, descricao) values ('ROLE_ADMIN', 'ADMINISTRADOR');
+insert into perfil(nome, descricao) values ('ROLE_SECRETARIA', 'SECRETÁRIA');
+insert into perfil(nome, descricao) values ('ROLE_GOP', 'GESTOR DE OPERAÇÕES');
+insert into perfil(nome, descricao) values ('ROLE_COORDENADOR', 'COORDENADOR');
+
+insert into usuario(login, nome, senha, ativado) values ('admin', 'Administrador','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', true);
+insert into usuario_perfil(login_usuario, nome_perfil) values ('admin','ROLE_ADMIN');
+
+insert into usuario(login, nome, senha, ativado) values ('sec', 'Secretária','add93534eeb463800fe0ed0946048d33636dd2a014fab92e8a37f77ce98c740b', true);
+insert into usuario_perfil(login_usuario, nome_perfil) values ('sec','ROLE_SECRETARIA');
+
+insert into usuario(login, nome, senha, ativado) values ('gop', 'Gestor de Operações','fa3086798c6622b42928da40e2fe3464c482b8df4ce97a04edea3d81e83bc07f', true);
+insert into usuario_perfil(login_usuario, nome_perfil) values ('gop','ROLE_GOP');
