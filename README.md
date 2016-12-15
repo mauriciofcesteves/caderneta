@@ -2,6 +2,7 @@
 
 This project is already finished and we used the technologies described bellow:
 
+-JAVA;
 -Maven Project;  
 -JSF 2, Primefaces, Facelets and JQuery;  
 -MVC Pattern;  
